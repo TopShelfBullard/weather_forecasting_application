@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
 
     location_data = fetch_location_data(user_input)
     if location_data
-      @location = Location.find_by(postal_code: location_data[:postal_code]) || Location.create(location_data)
+      @location = Current.user.locations.find_by(postal_code: location_data[:postal_code]) || Current.user.locations.create(location_data)
       redirect_to location_forecast_path(@location)
     else
       flash[:alert] = "Unable to find the entered location."

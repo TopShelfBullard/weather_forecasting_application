@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Locations", type: :system do
   before do
     driven_by(:rack_test)
+    login_as_test_user
   end
 
   let(:mock_geocode_response) do

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Forecasts", type: :system do
   before do
     driven_by(:rack_test)
+    @user = login_as_test_user
   end
 
   let(:location) do
@@ -10,7 +11,8 @@ RSpec.describe "Forecasts", type: :system do
       title: "Test Location",
       latitude: "40.7128",
       longitude: "-74.0060",
-      postal_code: "10001"
+      postal_code: "10001",
+      user: @user
     )
   end
 
