@@ -1,4 +1,10 @@
 class LocationsController < ApplicationController
+  def index
+    @locations = Current.user.locations.includes(:user)
+    @forecasts = fetch_forecasts_for_locations(@locations)
+    @new_location = Location.new
+  end
+
   def new
     @location = Location.new
   end
@@ -8,7 +14,7 @@ class LocationsController < ApplicationController
 
     if user_input.blank?
       flash[:alert] = "Address or IP cannot be blank."
-      redirect_to new_location_path and return
+      redirect_to locations_path and return
     end
 
     location_data = fetch_location_data(user_input)
@@ -17,7 +23,7 @@ class LocationsController < ApplicationController
       redirect_to location_forecast_path(@location)
     else
       flash[:alert] = "Unable to find the entered location."
-      redirect_to new_location_path
+      redirect_to locations_path
     end
   end
 
@@ -30,5 +36,13 @@ class LocationsController < ApplicationController
   def fetch_location_data(user_input)
     service = is_ip?(user_input) ? IpapiService.new(user_input) : GeocodeService.new(user_input)
     service.fetch_location
+  end
+
+  def fetch_forecasts_for_locations(locations)
+    locations.each_with_object({}) do |location, forecasts|
+      service = OpenMeteoService.new(location.latitude, location.longitude)
+      response = service.fetch_forecast
+      forecasts[location.id] = response["daily"] if response && response["daily"]
+    end
   end
 end

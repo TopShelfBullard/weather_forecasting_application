@@ -1,5 +1,7 @@
 <h1>7-Day Forecast for <%= @location.title %></h1>
 
+<p><%= link_to "Back to Locations", locations_path %></p>
+
 <% if @forecast %>
   <ul>
     <% @forecast["time"].each_with_index do |date, index| %>
