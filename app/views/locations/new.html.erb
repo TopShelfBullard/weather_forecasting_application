@@ -1,0 +1,13 @@
+<h1>Add a Location</h1>
+
+<% if flash[:alert] %>
+  <p class="flash alert"><%= flash[:alert] %></p>
+<% end %>
+
+<%= form_with url: locations_path, method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :address, "Enter Address or IP" %>
+    <%= form.text_field :address, placeholder: "street city state or x.x.x.x" %>
+  </div>
+  <%= form.submit "Get Forecast" %>
+<% end %>
