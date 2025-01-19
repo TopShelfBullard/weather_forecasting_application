@@ -1,4 +1,6 @@
 class LocationsController < ApplicationController
+  before_action :set_location, only: [:edit, :update, :destroy]
+
   def index
     @locations = Current.user.locations.includes(:user)
     @forecasts = fetch_forecasts_for_locations(@locations)
@@ -27,9 +29,21 @@ class LocationsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @location.update(location_params)
+      flash[:notice] = "Location title updated successfully."
+      redirect_to locations_path
+    else
+      flash[:alert] = "Failed to update the location title."
+      render :edit
+    end
+  end
+
   def destroy
-    location = Current.user.locations.find(params[:id])
-    location.destroy
+    @location.destroy
     redirect_to locations_path
   end
 
@@ -50,5 +64,13 @@ class LocationsController < ApplicationController
       response = service.fetch_forecast
       forecasts[location.id] = response["daily"] if response && response["daily"]
     end
+  end
+
+  def set_location
+    @location = Current.user.locations.find(params[:id])
+  end
+
+  def location_params
+    params.require(:location).permit(:title)
   end
 end

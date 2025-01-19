@@ -1,0 +1,12 @@
+<h1>Edit Location Title</h1>
+
+<%= form_with model: @location, local: true do |form| %>
+  <div>
+    <%= form.label :title, "Location Title" %>
+    <%= form.text_field :title %>
+  </div>
+  <div>
+    <%= form.submit "Update Title" %>
+    <%= button_to "Cancel", locations_path %>
+  </div>
+<% end %>

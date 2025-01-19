@@ -94,6 +94,26 @@ RSpec.describe "Locations", type: :system do
     end
   end
 
+  describe "Editing locations" do
+    it 'allows the user to edit a location title' do
+      @user.locations.create!(
+        title: "Test Location",
+        latitude: "12.3456",
+        longitude: "-65.4321",
+        postal_code: "12345"
+      )
+
+      visit locations_path
+      expect(page).to have_content("Test Location")
+
+      click_button "Edit"
+      fill_in "Location Title", with: "Updated Location Title"
+      click_button "Update Title"
+
+      expect(page).to have_content("Updated Location Title")
+    end
+  end
+
   describe "Error handling" do
     it "shows an error message when location cannot be found" do
       allow_any_instance_of(GeocodeService).to receive(:fetch_location).and_return(mock_failed_response)
