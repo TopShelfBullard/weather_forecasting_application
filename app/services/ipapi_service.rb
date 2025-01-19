@@ -8,7 +8,7 @@ class IpapiService
 
   def fetch_location
     response = self.class.get("/#{@ip}/json/")
-    return nil unless response.success?
+    return nil if error_response?(response)
 
     {
       title: get_title_from_response(response),
@@ -20,5 +20,9 @@ class IpapiService
 
   def get_title_from_response(response)
     "#{response["postal"]}: #{response["city"]}, #{response["region"]}, #{response["country_name"]}"
+  end
+
+  def error_response?(response)
+    response["error"] || !response.success?
   end
 end
