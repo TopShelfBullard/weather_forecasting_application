@@ -14,6 +14,9 @@ class UsersController < ApplicationController
       flash.now[:alert] = @user.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity
     end
+    rescue ActiveRecord::RecordNotUnique
+      flash[:alert] = "This email is already registered."
+      redirect_to new_user_path
   end
 
   private

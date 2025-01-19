@@ -1,5 +1,6 @@
 <h1>Sign Up</h1>
 
+<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
 <%= form_with model: @user, url: users_path, method: :post, local: true do |form| %>
   <div>
     <%= form.label :email_address, "Email Address" %>
