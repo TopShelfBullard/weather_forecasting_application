@@ -14,6 +14,9 @@
             </li>
           <% end %>
         </ul>
+        <%= form_with model: location, url: location_path(location), method: :delete, local: true do %>
+          <%= submit_tag "Delete" %>
+        <% end %>
       <% else %>
         <p>Unable to retrieve forecast data for this location.</p>
       <% end %>

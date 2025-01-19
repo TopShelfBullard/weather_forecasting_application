@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Locations", type: :system do
   before do
     driven_by(:rack_test)
-    login_as_test_user
+    @user = login_as_test_user
   end
 
   let(:mock_geocode_response) do
@@ -74,6 +74,23 @@ RSpec.describe "Locations", type: :system do
       visit locations_path
 
       expect(page).to have_content("54321: IP Test City, IP Test Region, IP Test Country")
+    end
+  end
+
+  describe "Deleting locations" do
+    it 'allows the user to delete a location from the index page' do
+      @user.locations.create!(
+        title: "Test Location",
+        latitude: "12.3456",
+        longitude: "-65.4321",
+        postal_code: "12345"
+      )
+
+      visit locations_path
+      expect(page).to have_content("Test Location")
+
+      click_button "Delete"
+      expect(page).not_to have_content("Test Location")
     end
   end
 

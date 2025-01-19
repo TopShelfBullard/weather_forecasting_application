@@ -27,6 +27,12 @@ class LocationsController < ApplicationController
     end
   end
 
+  def destroy
+    location = Current.user.locations.find(params[:id])
+    location.destroy
+    redirect_to locations_path
+  end
+
   private
 
   def is_ip?(user_input)
