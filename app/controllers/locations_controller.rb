@@ -11,6 +11,19 @@ class LocationsController < ApplicationController
     @location = Location.new
   end
 
+  def show
+    @location = Location.find(params[:location_id])
+    service = OpenMeteoService.new(@location.latitude, @location.longitude)
+    response = service.fetch_forecast
+
+    if response && response["daily"]
+      @forecast = response["daily"]
+    else
+      @forecast = nil
+      flash[:alert] = "Unable to fetch forecast data. Please try again later."
+    end
+  end
+
   def create
     address = params[:address]
     if address.blank?
@@ -24,7 +37,7 @@ class LocationsController < ApplicationController
         latitude: location_data[:latitude],
         longitude: location_data[:longitude]
       ) || Current.user.locations.create(location_data)
-      redirect_to location_forecast_path(@location)
+      redirect_to location_path(@location)
     else
       flash[:alert] = "Unable to find the entered location."
       redirect_to locations_path
