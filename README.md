@@ -11,3 +11,5 @@ Here are the instructions for using this weather forecaster.
 * You can add as many locations as you want, and the app allows you to delete them and edit the title for each forecasted location.
 
 * You are also able to log in and out from the dashboard page.
+
+NOTE: The free plan for the API for street addresses will sometimes throttle results, and that throttling seems to happen randomly. Consequently, some street addresses will not be forecasted immediately.
