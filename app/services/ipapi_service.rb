@@ -11,15 +11,10 @@ class IpapiService
     return nil if error_response?(response)
 
     {
-      title: get_title_from_response(response),
+      title: @ip,
       latitude: response["latitude"],
-      longitude: response["longitude"],
-      postal_code: response["postal"]
+      longitude: response["longitude"]
     }
-  end
-
-  def get_title_from_response(response)
-    "#{response["postal"]}: #{response["city"]}, #{response["region"]}, #{response["country_name"]}"
   end
 
   def error_response?(response)

@@ -8,10 +8,9 @@ RSpec.describe "Forecasts", type: :system do
 
   let(:location) do
     Location.create!(
-      title: "Test Location",
+      title: "1234 First St, Inisfree, WI",
       latitude: "40.7128",
       longitude: "-74.0060",
-      postal_code: "10001",
       user: @user
     )
   end
@@ -34,7 +33,7 @@ RSpec.describe "Forecasts", type: :system do
     it "displays the 7-day forecast for a location" do
       visit location_forecast_path(location)
 
-      expect(page).to have_content("7-Day Forecast for Test Location")
+      expect(page).to have_content("7-Day Forecast for 1234 First St, Inisfree, WI")
       expect(page).to have_content("1980-05-18")
       expect(page).to have_content("High: 80°F")
       expect(page).to have_content("Low: 70°F")

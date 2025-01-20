@@ -12,16 +12,18 @@ class LocationsController < ApplicationController
   end
 
   def create
-    user_input = params[:address]
-
-    if user_input.blank?
+    address = params[:address]
+    if address.blank?
       flash[:alert] = "Address or IP cannot be blank."
       redirect_to locations_path and return
     end
 
-    location_data = fetch_location_data(user_input)
+    location_data = fetch_location_data(address)
     if location_data
-      @location = Current.user.locations.find_by(postal_code: location_data[:postal_code]) || Current.user.locations.create(location_data)
+      @location = Current.user.locations.find_by(
+        latitude: location_data[:latitude],
+        longitude: location_data[:longitude]
+      ) || Current.user.locations.create(location_data)
       redirect_to location_forecast_path(@location)
     else
       flash[:alert] = "Unable to find the entered location."

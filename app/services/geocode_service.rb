@@ -11,21 +11,15 @@ class GeocodeService
     return nil if error_response?(response) || throttled_response?(response)
 
     {
-      title: get_title_from_response(response),
-      latitude: response["latt"].to_f,
-      longitude: response["longt"].to_f,
-      postal_code: response["standard"]["postal"]
+      title: @address,
+      latitude: response["latt"],
+      longitude: response["longt"]
     }
   end
 
-  def get_title_from_response(response)
-    data = response['standard']
-    "#{data["postal"]}: #{data["city"]}, #{data["region"]}, #{data["countryname"]}"
-  end
-
   def throttled_response?(response)
-    postal = response["postal"]
-    postal.is_a?(String) && postal.include?("Throttled!")
+    latitude = response["latt"]
+    latitude.is_a?(String) && latitude.include?("Throttled!")
   end
 
   def error_response?(response)

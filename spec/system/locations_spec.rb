@@ -8,19 +8,17 @@ RSpec.describe "Locations", type: :system do
 
   let(:mock_geocode_response) do
     {
-      title: "12345: Address Test City, Address Test Region, Address Test Country",
+      title: "1234 First St, Inisfree, WI",
       latitude: "12.3456",
-      longitude: "-65.4321",
-      postal_code: "12345"
+      longitude: "-65.4321"
     }
   end
 
   let(:mock_ipapi_response) do
     {
-      title: "54321: IP Test City, IP Test Region, IP Test Country",
+      title: "8.8.8.8",
       latitude: "65.4321",
-      longitude: "-12.3456",
-      postal_code: "54321"
+      longitude: "-12.3456"
     }
   end
 
@@ -38,20 +36,19 @@ RSpec.describe "Locations", type: :system do
       expect(page).to have_content("No locations found.")
       expect(page).to have_content("Add a Location")
 
-      fill_in "Enter Address or IP", with: "1234 First St, Inisfree, WI"
+      fill_in "Enter Street Address, Zipcode, or IP Address", with: "1234 First St, Inisfree, WI"
       click_button "Get Forecast"
 
-      expect(page).to have_content("7-Day Forecast for 12345: Address Test City, Address Test Region, Address Test Country")
+      expect(page).to have_content("7-Day Forecast for 1234 First St, Inisfree, WI")
 
       location = Location.last
-      expect(location.title).to eq("12345: Address Test City, Address Test Region, Address Test Country")
+      expect(location.title).to eq("1234 First St, Inisfree, WI")
       expect(location.latitude).to eq("12.3456")
       expect(location.longitude).to eq("-65.4321")
-      expect(location.postal_code).to eq("12345")
 
       visit locations_path
 
-      expect(page).to have_content("12345: Address Test City, Address Test Region, Address Test Country")
+      expect(page).to have_content("1234 First St, Inisfree, WI")
     end
 
     it "allows the user to add a location by ip" do
@@ -60,51 +57,48 @@ RSpec.describe "Locations", type: :system do
       expect(page).to have_content("No locations found.")
       expect(page).to have_content("Add a Location")
 
-      fill_in "Enter Address or IP", with: "8.8.8.8"
+      fill_in "Enter Street Address, Zipcode, or IP Address", with: "8.8.8.8"
       click_button "Get Forecast"
 
-      expect(page).to have_content("7-Day Forecast for 54321: IP Test City, IP Test Region, IP Test Country")
+      expect(page).to have_content("7-Day Forecast for 8.8.8.8")
 
       location = Location.last
-      expect(location.title).to eq("54321: IP Test City, IP Test Region, IP Test Country")
+      expect(location.title).to eq("8.8.8.8")
       expect(location.latitude).to eq("65.4321")
       expect(location.longitude).to eq("-12.3456")
-      expect(location.postal_code).to eq("54321")
 
       visit locations_path
 
-      expect(page).to have_content("54321: IP Test City, IP Test Region, IP Test Country")
+      expect(page).to have_content("8.8.8.8")
     end
   end
 
   describe "Deleting locations" do
     it 'allows the user to delete a location from the index page' do
       @user.locations.create!(
-        title: "Test Location",
+        title: "1234 First St, Inisfree, WI",
         latitude: "12.3456",
-        longitude: "-65.4321",
-        postal_code: "12345"
+        longitude: "-65.4321"
       )
 
       visit locations_path
-      expect(page).to have_content("Test Location")
+      expect(page).to have_content("1234 First St, Inisfree, WI")
 
       click_button "Delete"
-      expect(page).not_to have_content("Test Location")
+      expect(page).not_to have_content("1234 First St, Inisfree, WI")
     end
   end
 
   describe "Editing locations" do
     it 'allows the user to edit a location title' do
       @user.locations.create!(
-        title: "Test Location",
+        title: "1234 First St, Inisfree, WI",
         latitude: "12.3456",
-        longitude: "-65.4321",
-        postal_code: "12345"
+        longitude: "-65.4321"
       )
 
       visit locations_path
-      expect(page).to have_content("Test Location")
+      expect(page).to have_content("1234 First St, Inisfree, WI")
 
       click_button "Edit"
       fill_in "Location Title", with: "Updated Location Title"
@@ -116,11 +110,11 @@ RSpec.describe "Locations", type: :system do
 
   describe "Error handling" do
     it "shows an error message when location cannot be found" do
-      allow_any_instance_of(GeocodeService).to receive(:fetch_location).and_return(mock_failed_response)
-      allow_any_instance_of(IpapiService).to receive(:fetch_location).and_return(mock_failed_response)
+      allow_any_instance_of(GeocodeService).to receive(:fetch_location).and_return(nil)
+      allow_any_instance_of(IpapiService).to receive(:fetch_location).and_return(nil)
 
       visit locations_path
-      fill_in "Enter Address or IP", with: "invalid address"
+      fill_in "Enter Street Address, Zipcode, or IP Address", with: "invalid address"
       click_button "Get Forecast"
 
       expect(page).to have_content("Unable to find the entered location.")
