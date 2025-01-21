@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: [:edit, :update, :destroy]
+  before_action :set_location, only: [ :edit, :update, :destroy ]
 
   def index
     @locations = Current.user.locations.includes(:user)
@@ -32,15 +32,18 @@ class LocationsController < ApplicationController
     end
 
     location_data = fetch_location_data(address)
+    if location_data["error"]
+      flash[:alert] = location_data["error"]
+      redirect_to locations_path
+    end
+
+
     if location_data
       @location = Current.user.locations.find_by(
         latitude: location_data[:latitude],
         longitude: location_data[:longitude]
       ) || Current.user.locations.create(location_data)
       redirect_to location_path(@location)
-    else
-      flash[:alert] = "Unable to find the entered location."
-      redirect_to locations_path
     end
   end
 
