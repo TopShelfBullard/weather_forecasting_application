@@ -1,3 +1,19 @@
+<h2>Add a Location</h2>
+
+<% if flash[:alert] %>
+  <div style="color: red; margin-bottom: 1rem;">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<%= form_with url: locations_path, method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :address, "Enter Street Address, Zipcode, or IP Address" %>
+    <%= form.text_field :address, placeholder: "street city state zipcode, or zipcode, or x.x.x.x", size: 40 %>
+  </div>
+  <%= form.submit "Get Forecast" %>
+<% end %>
+
 <h1>Your Locations and Forecasts</h1>
 
 <% if @locations.any? %>
@@ -26,20 +42,3 @@
 <% else %>
   <p>No locations found.</p>
 <% end %>
-
-<h2>Add a Location</h2>
-
-<% if flash[:alert] %>
-  <div style="color: red; margin-bottom: 1rem;">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
-<%= form_with url: locations_path, method: :post, local: true do |form| %>
-  <div>
-    <%= form.label :address, "Enter Street Address, Zipcode, or IP Address" %>
-    <%= form.text_field :address, placeholder: "street city state zipcode, or zipcode, or x.x.x.x", size: 40 %>
-  </div>
-  <%= form.submit "Get Forecast" %>
-<% end %>
-
