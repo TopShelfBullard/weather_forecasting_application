@@ -1,0 +1,8 @@
+<div>
+  <h2><%= location.title %></h2>
+  <img src="<%= forecast %>" alt="Weather Forecast Graph" />
+  <%= button_to "Edit", edit_location_path(location), method: :get %>
+  <%= form_with model: location, url: location_path(location), method: :delete, local: true do %>
+    <%= submit_tag "Delete" %>
+  <% end %>
+</div>

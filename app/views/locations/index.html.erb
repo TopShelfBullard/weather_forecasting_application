@@ -15,29 +15,13 @@
 <% end %>
 
 <h1>Your Locations and Forecasts</h1>
-
 <% if @locations.any? %>
   <% @locations.each do |location| %>
-    <div>
-      <h2><%= location.title %></h2>
-      <% if @forecasts[location.id] %>
-        <ul>
-          <% @forecasts[location.id]["time"].each_with_index do |date, index| %>
-            <li>
-              <strong><%= date %></strong>:
-              High: <%= @forecasts[location.id]["temperature_2m_max"][index] %>°F,
-              Low: <%= @forecasts[location.id]["temperature_2m_min"][index] %>°F
-            </li>
-          <% end %>
-        </ul>
-        <%= button_to "Edit", edit_location_path(location), method: :get %>
-        <%= form_with model: location, url: location_path(location), method: :delete, local: true do %>
-          <%= submit_tag "Delete" %>
-        <% end %>
-      <% else %>
-        <p>Unable to retrieve forecast data for this location.</p>
-      <% end %>
-    </div>
+    <% if @forecasts[location.id] %>
+      <%= render "locations/location", location: location, forecast: @forecasts[location.id] %>
+    <% else %>
+      <p>Unable to retrieve forecast data for this location.</p>
+    <% end %>
   <% end %>
 <% else %>
   <p>No locations found.</p>

@@ -76,8 +76,8 @@ class LocationsController < ApplicationController
   def fetch_forecasts_for_locations(locations)
     locations.each_with_object({}) do |location, forecasts|
       service = OpenMeteoService.new(location.latitude, location.longitude)
-      response = service.fetch_forecast
-      forecasts[location.id] = response["daily"] if response && response["daily"]
+      forecast = service.fetch_forecast
+      forecasts[location.id] = WeatherChartService.build_chart_url(forecast["daily"])
     end
   end
 
