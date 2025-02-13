@@ -1,0 +1,11 @@
+.forecast-table {
+    border: 1px solid black;
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 500px;
+    border-collapse: collapse;
+}
+.forecast-table th, .forecast-table td {
+    border: 1px solid black;
+    padding: 5px;
+}

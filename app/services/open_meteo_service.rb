@@ -8,7 +8,14 @@ class OpenMeteoService
   end
 
   def fetch_forecast
-    self.class.get("/forecast", query: forecast_query_params)
+    forecast = self.class.get("/forecast", query: forecast_query_params)
+    return nil unless forecast["daily"]
+    {
+      dates: forecast["daily"]["time"],
+      highs: forecast["daily"]["temperature_2m_max"],
+      lows: forecast["daily"]["temperature_2m_min"],
+      chart_url: WeatherChartService.build_chart_url(forecast["daily"])
+    }
   end
 
   private

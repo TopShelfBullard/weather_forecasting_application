@@ -1,6 +1,27 @@
 <div>
   <h2><%= location.title %></h2>
-  <img src="<%= forecast %>" alt="Weather Forecast Graph" />
+  <table class="forecast-table">
+    <thead>
+    <tr>
+      <% forecast[:dates].each do |date| %>
+        <th><%= Date.parse(date).strftime("%b %d") %></th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <% forecast[:highs].each do |high| %>
+        <td><%= high %>°F</td>
+      <% end %>
+    </tr>
+    <tr>
+      <% forecast[:lows].each do |low| %>
+        <td><%= low %>°F</td>
+      <% end %>
+    </tr>
+    </tbody>
+  </table>
+  <img src="<%= forecast[:chart_url] %>" alt="Weather Forecast Graph" />
   <%= button_to "Edit", edit_location_path(location), method: :get %>
   <%= form_with model: location, url: location_path(location), method: :delete, local: true do %>
     <%= submit_tag "Delete" %>
