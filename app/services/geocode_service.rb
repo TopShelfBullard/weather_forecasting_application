@@ -11,7 +11,6 @@ class GeocodeService
     return nil if error_response?(response) || throttled_response?(response)
 
     {
-      title: @address,
       latitude: response["latt"],
       longitude: response["longt"]
     }

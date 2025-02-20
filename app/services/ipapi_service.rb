@@ -11,7 +11,6 @@ class IpapiService
     return nil if error_response?(response)
 
     {
-      title: @ip,
       latitude: response["latitude"],
       longitude: response["longitude"]
     }

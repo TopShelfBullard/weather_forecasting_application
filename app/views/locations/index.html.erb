@@ -8,6 +8,10 @@
 
 <%= form_with url: locations_path, method: :post, local: true do |form| %>
   <div>
+    <%= form.label :title, "Title" %>
+    <%= form.text_field :title, size: 40 %>
+  </div>
+  <div>
     <%= form.label :address, "Enter Street Address, Zipcode, or IP Address" %>
     <%= form.text_field :address, placeholder: "street city state zipcode, or zipcode, or x.x.x.x", size: 40 %>
   </div>

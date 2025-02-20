@@ -26,17 +26,19 @@ class LocationsController < ApplicationController
 
   def create
     address = params[:address]
-    if address.blank?
-      flash[:alert] = "Address or IP cannot be blank."
+    title = params[:title]
+    if address.blank? || title.blank?
+      flash[:alert] = address.blank? ? "Address or IP cannot be blank." : "Title cannot be blank."
       redirect_to locations_path and return
     end
 
     location_data = fetch_location_data(address)
     if location_data
       @location = Current.user.locations.find_by(
+        title: title,
         latitude: location_data[:latitude],
         longitude: location_data[:longitude]
-      ) || Current.user.locations.create(location_data)
+      ) || Current.user.locations.create(location_data.merge!(title: title))
       redirect_to location_path(@location)
     else
       flash[:alert] = "Unable to find the entered location."
